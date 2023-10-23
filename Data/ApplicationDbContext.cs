@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using LPA.Models.Domains;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
@@ -13,6 +14,7 @@ namespace LPA.Data
         public DbSet<Tournoi> Tournoi { get; set; }
         public DbSet<Equipe> Equipe { get; set; }
         public DbSet<Lieu> Lieu { get; set; }
+        public DbSet<Phase> Phase { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)

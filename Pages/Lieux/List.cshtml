@@ -1,0 +1,45 @@
+﻿@page
+@model LPA.Pages.Lieux.ListModel
+@{
+	var message = TempData["Message"]?.ToString();
+}
+
+<h1 class="mb-3">Liste des lieux</h1>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+	<div class="alert alert-success" role="alert">
+		@message
+	</div>
+}
+<div class="mb-3">
+	<a href="/Lieux/Add" class="btn btn-primary">Ajouter un lieu</a>
+</div>
+@if (Model.Lieux != null && Model.Lieux.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var lieu in Model.Lieux)
+			{
+				<tr>
+					<td>@lieu.Id</td>
+					<td>@lieu.Libelle</td>
+					<td>
+						<a href="/Lieux/Edit/@lieu.Id" class="btn btn-dark">Modifier</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Pas de lieu trouvé !</p>	
+}

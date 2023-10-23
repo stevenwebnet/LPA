@@ -1,4 +1,4 @@
-﻿namespace LPA.Data
+﻿namespace LPA.Models.Domains
 {
     public class Pronostic
     {

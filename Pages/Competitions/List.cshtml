@@ -1,0 +1,53 @@
+﻿@page
+@model LPA.Pages.Competitions.ListModel
+@{
+	var message = TempData["Message"]?.ToString();
+}
+
+<h1 class="mb-3">Liste des compétitions</h1>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+	<div class="alert alert-success" role="alert">
+		@message
+	</div>
+}
+
+<div class="mb-3">
+	<a href="/Competitions/Add" class="btn btn-primary">Ajouter une compétition</a>
+</div>
+
+@if (Model.CompetitionsByLieux != null && Model.CompetitionsByLieux.Any())
+{
+	@foreach (var competitionsByLieu in Model.CompetitionsByLieux)
+	{
+		<h3 class="mb-3">@competitionsByLieu.Key.Libelle</h3>
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nom</th>
+					<th> </th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach (var competition in competitionsByLieu)
+				{
+					<tr>
+						<td>@competition.Id</td>
+						<td>@competition.Libelle</td>
+						<td>
+							<a href="/Competitions/Edit/@competition.Id" class="btn btn-dark">Modifier</a>
+						</td>
+					</tr>
+				}
+			</tbody>
+		</table>
+	}
+	
+}
+else
+{
+	<p>Pas de compétition trouvé !</p>
+}
+

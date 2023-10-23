@@ -1,0 +1,35 @@
+﻿@page "{id:int}"
+@model LPA.Pages.Competitions.EditModel
+@{
+	var message = ViewData["Message"]?.ToString();
+}
+
+
+<form method="post">
+	<h1 class="mb-3">Modifier la compétition</h1>
+
+	@if (!string.IsNullOrWhiteSpace(message))
+	{
+		<div class="alert alert-success" role="alert">
+			@message
+		</div>
+	}
+	<div class="mb-3">
+		<label class="form-label">Id</label>
+		<input type="text" class="form-control" asp-for="EditCompetitionViewModel.Id" readonly />
+	</div>
+	<div class="mb-3">
+		<label class="form-label">Nom</label>
+		<input type="text" class="form-control" asp-for="EditCompetitionViewModel.Libelle" />
+	</div>
+	<div class="mb-3">
+		<label class="form-label" for="EditCompetitionViewModel.LieuId">Lieu</label>
+		<select asp-for="EditCompetitionViewModel.LieuId" asp-items="@Model.Lieux" class="form-control"></select>
+	</div>
+
+
+	<div class="mb-3 d-flex justify-content-between">
+		<button type="submit" class="btn btn-primary" asp-page-handler="Update">Enregistrer</button>
+		<button type="submit" class="btn btn-danger" asp-page-handler="Delete">Supprimer</button>
+	</div>
+</form>

@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace LPA.Data
+namespace LPA.Models.Domains
 {
     public class ApplicationUser : IdentityUser
     {

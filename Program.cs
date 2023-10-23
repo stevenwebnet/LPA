@@ -1,4 +1,5 @@
 using LPA.Data;
+using LPA.Models.Domains;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

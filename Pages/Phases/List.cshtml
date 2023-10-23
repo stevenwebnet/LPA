@@ -1,0 +1,45 @@
+﻿@page
+@model LPA.Pages.Phases.ListModel
+@{
+	var message = TempData["Message"]?.ToString();
+}
+
+<h1 class="mb-3">Liste des phases</h1>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+	<div class="alert alert-success" role="alert">
+		@message
+	</div>
+}
+<div class="mb-3">
+	<a href="/Phases/Add" class="btn btn-primary">Ajouter une phase</a>
+</div>
+@if (Model.Phases != null && Model.Phases.Any())
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Id</th>
+				<th>Nom</th>
+				<th> </th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var phase in Model.Phases)
+			{
+				<tr>
+					<td>@phase.Id</td>
+					<td>@phase.Libelle</td>
+					<td>
+						<a href="/Phases/Edit/@phase.Id" class="btn btn-dark">Modifier</a>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
+else
+{
+	<p>Pas de phase trouvée !</p>
+}

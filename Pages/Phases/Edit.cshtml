@@ -1,0 +1,31 @@
+﻿@page "{id:int}"
+@model LPA.Pages.Phases.EditModel
+@{
+	var message = ViewData["Message"]?.ToString();
+}
+
+
+<form method="post">
+	<h1 class="mb-3">Modifier la phase</h1>
+
+	@if (!string.IsNullOrWhiteSpace(message))
+	{
+		<div class="alert alert-success" role="alert">
+			@message
+		</div>
+	}
+	<div class="mb-3">
+		<label class="form-label">Id</label>
+		<input type="text" class="form-control" asp-for="EditPhaseViewModel.Id" readonly />
+	</div>
+	<div class="mb-3">
+		<label class="form-label">Nom</label>
+		<input type="text" class="form-control" asp-for="EditPhaseViewModel.Libelle" />
+	</div>
+
+
+	<div class="mb-3 d-flex justify-content-between">
+		<button type="submit" class="btn btn-primary" asp-page-handler="Update">Enregistrer</button>
+		<button type="submit" class="btn btn-danger" asp-page-handler="Delete">Supprimer</button>
+	</div>
+</form>
