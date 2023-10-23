@@ -1,0 +1,37 @@
+﻿@page
+@model LPA.Pages.Equipes.AddModel
+@{
+    var message = ViewData["Message"]?.ToString();
+}
+
+<form method="post">
+    <h1 class="mb-3">Ajouter une équipe</h1>
+
+    @if (!string.IsNullOrWhiteSpace(message))
+    {
+        <div class="alert alert-success" role="alert">
+            @message
+        </div>
+    }
+
+    <div class="mb-3">
+        <label class="form-label">Nom</label>
+        <input type="text" class="form-control" asp-for="AddEquipeRequest.Libelle" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Compétitions</label>
+        @foreach (var competition in Model.Competitions)
+        {
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="AddEquipeRequest.CompetitionsId" value="@competition.Value" />
+                <label class="form-check-label">@competition.Text</label>
+            </div>
+        }
+    </div>
+
+    <div class="mb-3">
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>
+

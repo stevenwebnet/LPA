@@ -51,7 +51,9 @@ namespace LPA.Pages.Competitions
 					_dbContext.SaveChanges();
 
 					ViewData["Message"] = "La compétition à bien été modifiée !";
-				}
+
+                    OnGet(EditCompetitionViewModel.Id);  // Rechargez les données pour la vue
+                }
 			}
 		}
 

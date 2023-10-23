@@ -18,7 +18,6 @@ namespace LPA.Pages.Competitions
         }
         public void OnGet()
         {
-			//Competitions = _dbContext.Competition.GroupBy(c => c.LieuId);
 			CompetitionsByLieux = _dbContext.Competition.GroupBy(c => c.Lieu).ToList();
         }
     }

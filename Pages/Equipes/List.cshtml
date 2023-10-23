@@ -1,4 +1,56 @@
-﻿@page "{idCompetition:int}"
+﻿@page
 @model LPA.Pages.Equipes.ListModel
 @{
+	var message = TempData["Message"]?.ToString();
+}
+
+<h1 class="mb-3">Liste des équipes</h1>
+
+@if (!string.IsNullOrWhiteSpace(message))
+{
+	<div class="alert alert-success" role="alert">
+		@message
+	</div>
+}
+<div class="mb-3">
+	<a href="/Equipes/Add" class="btn btn-primary">Ajouter une équipe</a>
+</div>
+@if (Model.LieuxWithCompetitionsAndTeams != null && Model.LieuxWithCompetitionsAndTeams.Any())
+{
+    foreach (var lieu in Model.LieuxWithCompetitionsAndTeams)
+    {
+        <h3 class="mb-3">@lieu.Libelle</h3>
+
+        foreach (var competition in lieu.Competitions.Where(c => c.Equipes.Any()))
+        {
+            <h4>@competition.Libelle</h4>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Id</th>
+                        <th>Nom</th>
+                        @*<th>Logo</th>*@
+                        <th> </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var equipe in competition.Equipes)
+                    {
+                        <tr>
+                            <td>@equipe.Id</td>
+                            <td>@equipe.Libelle</td>
+                            @*<td><img src="@equipe.Logo" alt="@equipe.Libelle" width="50"></td>*@
+                            <td>
+                                <a href="/Equipes/Edit/@equipe.Id" class="btn btn-dark">Modifier</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    }
+}
+else
+{
+	<p>Pas d'équipe' trouvée !</p>
 }
