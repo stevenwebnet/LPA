@@ -15,7 +15,7 @@ namespace LPA.Pages.Competitions
 		private readonly ApplicationDbContext _dbContext;
 
 		[BindProperty]
-		public AddCompetitionViewModel AddCompetitionRequest { get; set; }
+		public AddCompetitionViewModel AddCompetitionViewModel { get; set; }
 
 		public List<SelectListItem> Lieux { get; set; }
 
@@ -37,14 +37,28 @@ namespace LPA.Pages.Competitions
 		{
 			var competitionDomainModel = new Competition
 			{
-				Libelle = AddCompetitionRequest.Libelle,
-				LieuId = AddCompetitionRequest.LieuId
+				Libelle = AddCompetitionViewModel.Libelle,
+				LieuId = AddCompetitionViewModel.LieuId
 			};
 
 			_dbContext.Competition.Add(competitionDomainModel);
 			_dbContext.SaveChanges();
 
-			TempData["Message"] = $"La compétition '{competitionDomainModel.Libelle}' à bien été ajoutée !";
+			var phases = new List<Phase>();
+			foreach (var phaseViewModel in AddCompetitionViewModel.Phases)
+			{
+				phases.Add(new Phase
+				{
+					Libelle = phaseViewModel.Libelle,
+					Ordre = phaseViewModel.Ordre,
+					CompetitionId = competitionDomainModel.Id
+				});
+			}
+
+			_dbContext.Phase.AddRange(phases);
+			_dbContext.SaveChanges();
+
+			TempData["Message"] = $"La compétition '{competitionDomainModel.Libelle}' et ses phases ont bien été ajoutées !";
 
 			return RedirectToPage("/Competitions/List");
 		}

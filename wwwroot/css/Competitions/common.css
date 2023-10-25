@@ -1,0 +1,20 @@
+﻿.table-scroll {
+    max-height: 280px; /* ajustez cette valeur selon vos besoins */
+    overflow-y: auto;
+    margin-bottom: 20px;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom:10px;
+}
+
+/* Si nécessaire, assurez-vous que les colonnes des deux tables correspondent en largeur */
+table th, table td {
+    width: 50%; /* ou toute autre valeur ou répartition que vous souhaitez */
+}
+
+.hidden {
+    display: none;
+}

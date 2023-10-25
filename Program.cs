@@ -2,6 +2,7 @@ using LPA.Data;
 using LPA.Models.Domains;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -54,4 +55,32 @@ app.UseAuthorization();
 
 app.MapRazorPages();
 
+await InitializeAsync(app);
+
 app.Run();
+
+
+
+
+static async Task InitializeAsync(IApplicationBuilder app)
+{
+	var services = app.ApplicationServices.CreateScope().ServiceProvider;
+
+	var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+
+	string defaultRole = "Admin";
+	string defaultUserEmail = "admin@lpa.com";
+	string defaultPassword = "P@ssw0rd";
+
+	if (await userManager.FindByEmailAsync(defaultUserEmail) is null)
+	{
+		var user = new ApplicationUser
+		{
+			UserName = defaultUserEmail,
+			Email = defaultUserEmail,
+			EmailConfirmed = true,
+		};
+		await userManager.CreateAsync(user, defaultPassword);
+		await userManager.AddToRoleAsync(user, defaultRole);
+	}
+}

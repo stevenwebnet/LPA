@@ -1,11 +1,22 @@
 ﻿@page "{id:int}"
+@using Microsoft.AspNetCore.Antiforgery;
 @model LPA.Pages.Competitions.EditModel
+@inject IAntiforgery antiforgery
 @{
-	var message = ViewData["Message"]?.ToString();
+	var message = TempData["Message"]?.ToString();
 }
 
+@section Styles {
+	<link rel="stylesheet" href="~/css/Competitions/common.css" />
+}
+
+@section Scripts {
+	<script src="~/js/Competitions/edit.js"></script>
+	<script src="~/js/Competitions/common.js"></script>
+}
 
 <form method="post">
+	@Html.AntiForgeryToken()
 	<h1 class="mb-3">Modifier la compétition</h1>
 
 	@if (!string.IsNullOrWhiteSpace(message))
@@ -16,7 +27,7 @@
 	}
 	<div class="mb-3">
 		<label class="form-label">Id</label>
-		<input type="text" class="form-control" asp-for="EditCompetitionViewModel.Id" readonly />
+		<input type="text" class="form-control" id="CompetitionId" asp-for="EditCompetitionViewModel.Id" readonly />
 	</div>
 	<div class="mb-3">
 		<label class="form-label">Nom</label>
@@ -27,9 +38,93 @@
 		<select asp-for="EditCompetitionViewModel.LieuId" asp-items="@Model.Lieux" class="form-control"></select>
 	</div>
 
+	<div class="mb-3">
+		<label>
+			<input type="radio" id="championshipRadio" name="competitionType" value="championship" checked onchange="toggleCompetitionType()"> Championnat
+		</label>
+		<label>
+			<input type="radio" id="tournamentRadio" name="competitionType" value="tournament" onchange="toggleCompetitionType()"> Tournoi
+		</label>
+	</div>
+
+
+	<div id="championshipFields">
+		<div class="mb-3">
+			<label class="form-label">Nombre d'équipes</label>
+			<input type="number" class="form-control" id="championship-teams">
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Nombre de confrontations directes</label>
+			<input type="number" class="form-control" id="championship-matches">
+		</div>
+		<button type="button" onclick="generateChampionship()" class="btn btn-success mb-3">Générer les journées</button>
+	</div>
+
+	<div id="tournamentFields" class="hidden">
+		<div class="mb-3">
+			<label class="form-label">Équipes par groupe</label>
+			<input type="number" class="form-control" id="tournament-teams-per-group">
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Confrontations par équipe</label>
+			<input type="number" class="form-control" id="tournament-matches-per-team">
+		</div>
+		<div class="mb-3">
+			<label class="form-label">Phase finale commence au :</label>
+			<select class="form-control" id="tournament-start-phase"></select>
+		</div>
+		<div class="mb-3 form-check">
+			<input type="checkbox" class="form-check-input" id="tournament-return-match">
+			<label class="form-check-label" for="tournament-return-match">Match retour pour toutes les phases sauf la finale</label>
+		</div>
+		<button type="button" onclick="generateTournament()" class="btn btn-success mb-3">Générer les phases du tournoi</button>
+	</div>
+
+	
+
+	<h2 class="mb-3">Phases</h2>
+	<div class="mb-3">
+		<!-- Table pour l'en-tête -->
+		<table class="table">
+			<thead>
+				<tr>
+					<th>Nom</th>
+					<th>Ordre</th>
+					<th></th>
+				</tr>
+			</thead>
+		</table>
+
+		<!-- Div avec table pour le corps (tbody) -->
+		<div class="table-scroll" id="phasesTableDiv">
+			<table class="table">
+				<tbody>
+					@for (var i = 0; i < Model.EditCompetitionViewModel.Phases.Count; i++)
+					{
+						<tr>
+							<td>
+								<input type="hidden" asp-for="@Model.EditCompetitionViewModel.Phases[i].Id" />
+								<input type="text" class="form-control" asp-for="@Model.EditCompetitionViewModel.Phases[i].Libelle" />
+							</td>
+							<td>
+								<input type="number" class="form-control" asp-for="@Model.EditCompetitionViewModel.Phases[i].Ordre" />
+							</td>
+							<td>
+								<button type="button" class="btn btn-danger btn-sm" onclick="deletePhase(this, @Model.EditCompetitionViewModel.Phases[i].Id)">Supprimer</button>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+		<button type="button" id="addNewPhase" class="btn btn-success">Ajouter une phase</button>
+		<button type="button" onclick="deleteAllPhases()" class="btn btn-success">Supprimer toutes les phases</button>
+	</div>
 
 	<div class="mb-3 d-flex justify-content-between">
 		<button type="submit" class="btn btn-primary" asp-page-handler="Update">Enregistrer</button>
 		<button type="submit" class="btn btn-danger" asp-page-handler="Delete">Supprimer</button>
 	</div>
 </form>
+
+
